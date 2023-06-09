@@ -39,11 +39,8 @@ for k in scratch_dict.keys():
         copy_k = 'model.diffusion_' + name
     else:
         copy_k = k
-    if copy_k in pretrained_weights:
-        target_dict[k] = pretrained_weights[copy_k].clone()
-    else:
-        target_dict[k] = scratch_dict[k].clone()
-        print(f'These weights are newly added: {k}')
+    target_dict[k] = pretrained_weights.get(copy_k, scratch_dict[k]).clone()
+
 
 model.load_state_dict(target_dict, strict=True)
 torch.save(model.state_dict(), output_path)
